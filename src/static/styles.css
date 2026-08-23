@@ -32,6 +32,16 @@
   --info-light: #d1ecf1;
 }
 
+body.dark-mode {
+  --background: #121212;
+  --surface: #1e1e1e;
+  --text-primary: #f5f5f5;
+  --text-secondary: #c4c4c4;
+  --border: #444444;
+  --border-light: #333333;
+  --border-focus: #666666;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -621,6 +631,9 @@ footer {
   position: absolute;
   top: 10px;
   right: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 #user-status {
@@ -656,6 +669,11 @@ footer {
 
 .user-icon {
   font-size: 1rem;
+}
+
+body.dark-mode input {
+  background-color: var(--surface);
+  color: var(--text-primary);
 }
 
 #logout-button {

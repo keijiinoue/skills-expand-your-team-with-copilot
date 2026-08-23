@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("login-form");
   const closeLoginModal = document.querySelector(".close-login-modal");
   const loginMessage = document.getElementById("login-message");
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = document.getElementById("theme-icon");
+  const themeLabel = document.getElementById("theme-label");
 
   // Activity categories with corresponding colors
   const activityTypes = {
@@ -66,6 +69,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (activeTimeFilter) {
       currentTimeRange = activeTimeFilter.dataset.time;
     }
+  }
+
+  function setTheme(theme) {
+    const isDarkMode = theme === "dark";
+    document.body.classList.toggle("dark-mode", isDarkMode);
+    themeToggle.setAttribute("aria-pressed", isDarkMode);
+    themeToggle.setAttribute(
+      "aria-label",
+      `Switch to ${isDarkMode ? "light" : "dark"} mode`
+    );
+    themeIcon.textContent = isDarkMode ? "☀️" : "🌙";
+    themeLabel.textContent = `${isDarkMode ? "Light" : "Dark"} mode`;
+    localStorage.setItem("theme", theme);
   }
 
   // Function to set day filter
@@ -599,6 +615,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Event listeners for search and filter
+  themeToggle.addEventListener("click", () => {
+    setTheme(document.body.classList.contains("dark-mode") ? "light" : "dark");
+  });
+
   searchInput.addEventListener("input", (event) => {
     searchQuery = event.target.value;
     displayFilteredActivities();
@@ -881,6 +901,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Initialize app
+  setTheme(localStorage.getItem("theme") === "dark" ? "dark" : "light");
   checkAuthentication();
   initializeFilters();
   fetchActivities();
