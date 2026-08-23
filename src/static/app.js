@@ -568,8 +568,60 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `
         }
+        <div class="sharing-actions">
+          <span class="sharing-label">Share with friends:</span>
+          <div class="sharing-buttons"></div>
+        </div>
       </div>
     `;
+
+    const activityUrl = new URL(window.location.href);
+    activityUrl.hash = `activity-${encodeURIComponent(name)}`;
+    const shareText = `Check out ${name} at Mergington High School: ${formattedSchedule}`;
+    const sharingButtons = activityCard.querySelector(".sharing-buttons");
+    const sharingActions = activityCard.querySelector(".sharing-actions");
+    sharingActions.setAttribute("aria-label", `Share ${name}`);
+
+    const shareOptions = [
+      {
+        label: "Facebook",
+        className: "facebook-share-button",
+        url: `https://www.facebook.com/sharer/sharer.php?${new URLSearchParams(
+          { u: activityUrl.href }
+        )}`,
+      },
+      {
+        label: "X",
+        className: "x-share-button",
+        url: `https://twitter.com/intent/tweet?${new URLSearchParams({
+          text: shareText,
+          url: activityUrl.href,
+        })}`,
+      },
+      {
+        label: "Email",
+        className: "email-share-button",
+        url: `mailto:?${new URLSearchParams({
+          subject: `Join me at ${name}`,
+          body: `${shareText}\n${activityUrl.href}`,
+        })}`,
+      },
+    ];
+
+    shareOptions.forEach(({ label, className, url }) => {
+      const shareLink = document.createElement("a");
+      shareLink.className = `share-button ${className}`;
+      shareLink.href = url;
+      shareLink.textContent = label;
+      shareLink.setAttribute("aria-label", `Share ${name} on ${label}`);
+
+      if (label !== "Email") {
+        shareLink.target = "_blank";
+        shareLink.rel = "noopener noreferrer";
+      }
+
+      sharingButtons.appendChild(shareLink);
+    });
 
     // Add click handlers for delete buttons
     const deleteButtons = activityCard.querySelectorAll(".delete-participant");
